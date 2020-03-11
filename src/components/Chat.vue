@@ -2,15 +2,15 @@
 <template>
   <div class="Chat">
     <div class="chatTop">
-      <el-steps :active="active" finish-status="success" align-center>
-        <el-step title="创建"></el-step>
-        <el-step title="询价"></el-step>
-        <el-step title="执行"></el-step>
-        <el-step title="结束"></el-step>
-      </el-steps>
-      <div class="btnRow">
-        <div class="btn">录入变更</div>
-      </div>
+<!--      <el-steps :active="active" finish-status="success" align-center>-->
+<!--        <el-step title="创建"></el-step>-->
+<!--        <el-step title="询价"></el-step>-->
+<!--        <el-step title="执行"></el-step>-->
+<!--        <el-step title="结束"></el-step>-->
+<!--      </el-steps>-->
+<!--      <div class="btnRow">-->
+<!--        <div class="btn">录入变更</div>-->
+<!--      </div>-->
       <div class="chatBox">
         <div class="title">
           <div>消息记录</div>
@@ -100,7 +100,7 @@ export default {
   .sendBtn {
     background: linear-gradient(
       90deg,
-      rgba(44, 100, 255, 1),
+      #005E92,
       rgba(52, 171, 255, 1)
     );
     margin-right: 1rem;

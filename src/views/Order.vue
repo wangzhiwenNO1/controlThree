@@ -17,7 +17,7 @@
               </li>
               <li>
                 <div>负责人</div>
-                <div>
+                <div class="conscientious">
                   <div class="avatar"></div>
                   <div>斩无极</div>
                 </div>
@@ -225,17 +225,20 @@
         </div>
       </el-col>
     </el-row>
+    <OrderList></OrderList>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import Chat from "../components/Chat";
+import OrderList from "../components/dialog/OrderList";
 
 export default {
   name: "order",
   components: {
-    Chat
+    Chat,
+    OrderList
   },
   data() {
     return {
@@ -328,7 +331,7 @@ export default {
   .upOffer {
     background: linear-gradient(
       90deg,
-      rgba(44, 100, 255, 1),
+      #005E92,
       rgba(52, 171, 255, 1)
     );
     margin-top: 0.5rem;
@@ -383,7 +386,7 @@ export default {
       }
 
       & > div:last-child {
-        color: #333333;
+        color: #999999;
         font-size: 0.75rem;
       }
     }
@@ -417,9 +420,19 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
+        font-size:0.75rem;
       }
       & > div:first-child {
         margin-bottom: 0.5rem;
+      }
+
+      .conscientious{
+        font-size:0.75rem;
+        flex-direction: column;
+        & > div {
+
+          font-size:0.75rem;
+        }
       }
 
       &:last-child {
@@ -427,7 +440,7 @@ export default {
       }
 
       .state {
-        width: 5rem;
+        width: 4rem;
         height: 1.25rem;
         background: linear-gradient(
           90deg,

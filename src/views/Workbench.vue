@@ -3,42 +3,44 @@
     <div class="topBox">
       <ul>
         <li>
-          <div>待报价订单</div>
-          <div>3</div>
+          <div>需求方数量</div>
+          <div>2000 | <span>178</span></div>
         </li>
         <li>
-          <div>执行中订单</div>
-          <div>16</div>
+          <div>供应方数量</div>
+          <div>600 | <span>36</span></div>
         </li>
         <li>
-          <div>已完成订单</div>
+          <div>在线需求方</div>
           <div>266</div>
         </li>
         <li>
-          <div>总支出</div>
-          <div>
-            <span>￥</span>82,345
-          </div>
+          <div>在线供应方</div>
+          <div>82,345</div>
+        </li>
+        <li>
+          <div>总链接数量</div>
+          <div>82,345</div>
         </li>
       </ul>
       <ul>
         <li>
-          <div>已完成订单</div>
+          <div>已完成订单数量</div>
           <div>266</div>
         </li>
         <li>
-          <div>已完成订单</div>
+          <div>总交易额</div>
           <div>266</div>
         </li>
       </ul>
     </div>
-    <div class="mainBox">
-      <div class="leftBox">
+    <div class="mainBoxs">
+      <div class="leftBoxs">
         <div class="leftTop itemBox">
           <div class="title">快捷操作</div>
           <div class="btnRow">
-            <el-button round icon="el-icon-tickets">默认按钮</el-button>
-            <el-button round icon="el-icon-circle-plus-outline">默认按钮</el-button>
+            <el-button round icon="el-icon-circle-plus-outline">邀请需求方</el-button>
+            <el-button round icon="el-icon-circle-plus-outline">邀请供应方</el-button>
           </div>
         </div>
         <div class="leftRight itemBox">
@@ -69,10 +71,10 @@
         <div class="title">统计分析</div>
         <div class="tabBoxs">
           <div>
-            <i class="icon"></i>支出统计
+            <i class="icon icon-expenditure"></i>支出统计
           </div>
           <div>
-            <i class="icon"></i>订单统计
+            <i class="icon icon-order"></i>订单统计
           </div>
         </div>
         <div>
@@ -173,11 +175,11 @@ export default {
 };
 </script>
 
-<style lang="less" scoped>
+<style lang="less" >
 .workbench {
   padding: 1rem;
   background: rgba(242, 244, 250, 1);
-  height: calc(100vh - 9.6rem);
+  min-height: calc(100vh - 9.6rem);
   box-sizing: border-box;
 
   .title {
@@ -197,6 +199,11 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color:black;
+
+    span{
+      color: #228AC4;
+    }
 
     ul {
       display: flex;
@@ -226,7 +233,7 @@ export default {
     }
     & > ul:last-child {
       & div:last-child {
-        color: #2c64ff;
+        color: #228AC4;
       }
     }
   }
@@ -236,20 +243,26 @@ export default {
     background: #fff;
   }
 
-  .mainBox {
+  .mainBoxs {
     display: flex;
 
-    .leftBox {
+    .leftBoxs {
       flex: 1;
 
       .leftTop {
         margin: 1rem 0;
+        .el-icon-circle-plus-outline{
+          color:#2C64FF;
+          font-size: 1.2rem;
+        }
       }
 
       .btnRow {
         display: flex;
         justify-content: center;
         padding: 1rem;
+
+
       }
 
       .rightTop {
@@ -321,12 +334,22 @@ export default {
       font-size: 0.88rem;
     }
 
+
     .icon {
       width: 1rem;
       height: 1rem;
       margin-right: 0.5rem;
       display: block;
       background: pink;
+    }
+    .icon-expenditure {
+      background: url("../assets/imgs/btn-zhichu2.png") no-repeat;
+      background-size: contain;
+    }
+
+    .icon-order {
+      background: url("../assets/imgs/btn-dingdan2.png") no-repeat;
+      background-size: contain;
     }
   }
 
@@ -338,7 +361,8 @@ export default {
       display: inline-block;
       width: 1rem;
       height: 1rem;
-      background: pink;
+      background: url("../assets/imgs/btn-hqbz2.png") no-repeat;
+      background-size: contain;
       margin-left: 0.5rem;
     }
 
