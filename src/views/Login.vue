@@ -7,15 +7,15 @@
             <div class="title">登录</div>
             <div class="inputBox">
                 <div><i class="el-icon-message"></i></div>
-                <el-input placeholder="请输入您在所属机构中的职位名称"></el-input>
+                <el-input placeholder="请输入您在所属机构中的职位名称" v-model="userName"></el-input>
             </div>
             <div class="inputBox">
                 <div><i class="el-icon-message"></i></div>
-                <el-input placeholder="请输入所属机构的名称"></el-input>
+                <el-input placeholder="请输入所属机构的名称" v-model="password"></el-input>
             </div>
 
             <div>
-                <el-button round @click="jump(1)">登录</el-button>
+                <el-button round @click="goToLogin(1)">登录</el-button>
             </div>
             <div class="textBox">
                 <div>忘记密码?</div>
@@ -30,9 +30,13 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+    import { mapMutations } from 'vuex';
     export default {
         data() {
             return {
+                userName:"",
+                password:"",
                 options: [{
                     value: '选项1',
                     label: '黄金糕'
@@ -52,7 +56,40 @@
                 value: ''
             }
         },
+        computed: {
+            ...mapState(['hasLogin', 'userInfo'])
+        },
         methods: {
+            ...mapMutations(['login']),
+            goToLogin(){
+                let that=this;
+                this.Axios.post("/lab2lab/v1/provider/login",{
+                    userName:this.userName,
+                    password:this.password,
+                }).then(function (res) {
+                    console.log(res);
+                    if(res.code==200){
+                        that.login(res.data);
+                        that.getTeam();
+                        that.$router.push({
+                            path: "/workbench",
+                        })
+                    }
+                })
+            },
+            //团队成员
+            getTeam() {
+                let that = this;
+                console.log(12);
+                this.Axios.get("/lab2lab/v1/provider/getteammember",{
+                    // access_token:that.userInfo.access_token
+                }).then(function (res) {
+                    console.log(res);
+                    if(res.code==200){
+                        that.changeTeamMembers(res.data);
+                    }
+                })
+            },
             jump(type){
                 let url="";
                 switch (type) {
@@ -60,7 +97,7 @@
                         url="/workbench";
                         break;
                     case 2:
-                        url="/register";
+                        url="/registerTwo";
                         break;
 
                     default:
@@ -173,7 +210,7 @@
 
         .el-button {
             width: 100%;
-            background: linear-gradient(90deg, #005E92, rgba(52, 171, 255, 1));
+            background: linear-gradient(90deg, rgba(44, 100, 255, 1), rgba(52, 171, 255, 1));
             color: #ffffff;
             margin-top: 0.5rem;
         }
