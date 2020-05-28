@@ -48,17 +48,7 @@ const routes = [
         name: 'ordering',
         component: () => import(/* webpackChunkName: "about" */ '../views/OrderIng.vue')
     },
-    {
-        path: '/market',/*供应商管理*/
-        name: 'market',
-        component: () => import(/* webpackChunkName: "about" */ '../views/Market.vue'),
-        // children:[
-        //   {
-        //     path:'service',
-        //     component:() => import(/* webpackChunkName: "about" */ '../components/market/Service.vue'),
-        //   }
-        // ]
-    },
+
     {
         path: '/request',/*需求方*/
         name: 'request',
@@ -80,16 +70,12 @@ const routes = [
         name: 'editDemander',
         component: () => import(/* webpackChunkName: "about" */ '../views/EditDemander')
     },
-    {
-        path: '/demand',/*申请表*/
-        name: 'demand',
-        component: () => import(/* webpackChunkName: "about" */ '../components/market/Demand')
-    },
-    {
-        path: '/laboratory',/*在线市场*/
-        name: 'laboratory',
-        component: () => import(/* webpackChunkName: "about" */ '../components/market/Laboratory')
-    },
+
+    // {
+    //     path: '/laboratory',/*在线市场*/
+    //     name: 'laboratory',
+    //     component: () => import(/* webpackChunkName: "about" */ '../components/market/Laboratory')
+    // },
     {
         path: '/equipment',/*设备管理*/
         name: 'equipment',
