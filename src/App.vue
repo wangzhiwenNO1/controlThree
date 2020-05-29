@@ -1,60 +1,7 @@
 <template>
   <div id="app">
-    <div>
-      <el-row class="TopBox">
-        <el-col :span="8">
-          <div class="grid-content bg-purple topLeft">
-            <div class="icon"></div>
-            <div>上海达摩科技有限公司 | 令狐冲</div>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content bg-purple-light TopsearchBox">
-            <div class="searchBox"></div>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content bg-purple topRight">
-            <div class="alarm">
-              <i class="icon "></i>
-              <span>(5)</span>
-            </div>
-            <div class="avatar"></div>
-          </div>
-        </el-col>
-      </el-row>
-      <div class="tabBox">
-        <div class="tabLeft">
-          <div class="tabItem" :class="type==1?'active':''" @click="jump(1)">
-            <div class="icon gzt"></div>
-            <div>工作台</div>
-          </div>
-          <div class="tabItem" :class="type==2?'active':''" @click="jump(2)">
-            <div class="icon zxsc"></div>
-            <div>需求方管理</div>
-          </div>
-          <div class="tabItem" :class="type==3?'active':''" @click="jump(3)">
-            <div class="icon gysgl"></div>
-            <div>供应商管理</div>
-          </div>
+    <Myheader></Myheader>
 
-          <div class="tabItem" :class="type==4?'active':''" @click="jump(4)">
-            <div class="icon sz"></div>
-            <div>设置</div>
-          </div>
-        </div>
-
-        <!-- right -->
-        <div class="tabRight">
-          <div >团队成员</div>
-          <div>
-            <img src="#" alt />
-          </div>
-          <div>12+</div>
-          <div class="icon"></div>
-        </div>
-      </div>
-    </div>
     <div class="viewBox">
       <router-view />
     </div>
@@ -77,44 +24,21 @@
 </template>
 
 <script>
-
+  import {mapState} from "vuex";
+  import Myheader from "./views/Myheader";
 
 export default {
   name: 'app',
-    components:{
-
-    },
+  components: {
+    Myheader,
+  },
   data(){
     return {
       type:1
     }
   },
   methods:{
-    jump(type){
-      this.type=type;
-      let url="";
-      switch (type) {
-        case 1:
-          url="/workbench";
-              break;
-        case 2:
-          url="/request";
-          break;
-        case 3:
-          url="/supply";
-          break;
-        case 4:
-          url="/setup/authority";
-          break;
 
-        default:
-          break;
-      }
-
-      this.$router.push({
-        path: url,
-      })
-    }
   }
 }
 </script>

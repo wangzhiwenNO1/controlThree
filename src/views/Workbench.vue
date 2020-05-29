@@ -202,7 +202,6 @@
     methods: {
       //快速选择
       quickTime(){
-        console.log(12);
         if(!this.analyze){
           this.getpaycount();
         }else{
@@ -223,7 +222,7 @@
       // 需求方代办事项列表
       gettodolist() {
         let that = this;
-        this.Axios.get("/lab2lab/v1/requestor/gettodolist", {}).then(function (res) {
+        this.Axios.get("/lab2lab/v1/system/gettodolist", {}).then(function (res) {
           console.log("需求方代办事项列表", res);
           if (res.code == 200) {
             that.todolist = res.data;
@@ -234,7 +233,7 @@
       getNumbers() {
 
         let that = this;
-        this.Axios.get("/lab2lab/v1/requestor/getnumbers", {
+        this.Axios.get("/lab2lab/v1/system/getcount", {
         }).then(function (res) {
           console.log(res);
           if (res.code == 200) {
@@ -285,7 +284,7 @@
       getpaycount(){
         //  获取需求方数字统计
         let that = this;
-        this.Axios.get("/lab2lab/v1/requestor/getpaycount", {
+        this.Axios.get("/lab2lab/v1/system/getcount", {
           startDate:"2020-01-01",
           endDate:"2020-02-01",
         }).then(function (res) {
@@ -294,8 +293,8 @@
             if(res.data.length>0){
               let paymentList=[],paymentDateList=[];
               res.data.forEach((item)=>{
-                paymentList.push(item.payment);
-                paymentDateList.push(item.paymentDate);
+                paymentList.push(item.count);
+                paymentDateList.push(item.statDate);
               })
               that.paymentDateList=paymentDateList;
               that.paymentList=paymentList;
@@ -310,7 +309,7 @@
       //需求方订单统计接口
       getordercount(){
         let that = this;
-        this.Axios.get("/lab2lab/v1/requestor/getordercount", {
+        this.Axios.get("/lab2lab/v1/system/getordercount", {
           startDate:"2020-01-01",
           endDate:"2020-02-01",
         }).then(function (res) {
@@ -341,7 +340,7 @@
           inputErrorMessage: '邮箱格式不正确'
         }).then(({value}) => {
           //用户邀请实验室
-          that.Axios.get("/lab2lab/v1/requestor/invitenewcustomer", {
+          that.Axios.get("/lab2lab/v1/system/invitenewcustomer", {
             email: value
           }).then(function (res) {
             console.log("用户邀请实验室", res);
