@@ -45,7 +45,7 @@
                                             <i class="el-icon-more"></i>
                                             <div class="editBox" v-if="item==1">
                                                 <div class="triangle triangleEdit"></div>
-                                                <div class="editDel">
+                                                <div class="editDel" @click="deletenotification">
                                                     <i class="el-icon-delete"></i>删除改通知
                                                 </div>
                                                 <div class="editClose">
@@ -146,6 +146,17 @@
         },
         methods:{
             ...mapMutations(['logOut']),
+            deletenotification(id){
+                let that=this;
+                this.Axios.get("/lab2lab/v1/system/deletenotification",{
+                    id:id,
+                }).then(function (res) {
+                    console.log(res);
+                    if(res.code==200){
+
+                    }
+                })
+            },
             jump(type) {
                 this.type = type;
                 let url = "";
@@ -174,7 +185,7 @@
             //需求方登出
             logout(){
                 let that=this;
-                this.Axios.get("/lab2lab/v1/requestor/logout",{
+                this.Axios.get("/lab2lab/v1/system/logout",{
                     userName:this.userName,
                     password:this.password,
                 }).then(function (res) {
