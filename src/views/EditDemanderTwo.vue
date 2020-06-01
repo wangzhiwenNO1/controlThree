@@ -33,7 +33,7 @@
                                     style="width: 100%">
                                 <el-table-column label="注册类型">
                                     <template slot-scope="scope">
-<!--                                        <div>{{}}</div>-->
+                                        <!--                                        <div>{{}}</div>-->
                                         <el-select size="mini" v-model="value" placeholder="请选择">
                                             <el-option
                                                     v-for="item in options"
@@ -59,14 +59,14 @@
                                 <el-table-column label="服务经理">
                                     <template slot-scope="scope">
                                         <div>{{labdetail.managerName}}</div>
-<!--                                        <el-select size="mini" v-model="value" placeholder="请选择">-->
-<!--                                            <el-option-->
-<!--                                                    v-for="item in options"-->
-<!--                                                    :key="item.value"-->
-<!--                                                    :label="item.label"-->
-<!--                                                    :value="item.value">-->
-<!--                                            </el-option>-->
-<!--                                        </el-select>-->
+                                        <!--                                        <el-select size="mini" v-model="value" placeholder="请选择">-->
+                                        <!--                                            <el-option-->
+                                        <!--                                                    v-for="item in options"-->
+                                        <!--                                                    :key="item.value"-->
+                                        <!--                                                    :label="item.label"-->
+                                        <!--                                                    :value="item.value">-->
+                                        <!--                                            </el-option>-->
+                                        <!--                                        </el-select>-->
                                     </template>
                                 </el-table-column>
                                 <el-table-column label="付费方式">
@@ -196,7 +196,7 @@
             ///lab2lab/v1/system/getlabdetail需求方详细信息
             getlabdetail(id){
                 let that=this;
-                this.Axios.get("/lab2lab/v1/system/getcustomerdetail",{
+                this.Axios.get("/lab2lab/v1/system/getlabdetail",{
                     id:id,
                 }).then(function (res) {
                     console.log("需求方详细信息",res);
