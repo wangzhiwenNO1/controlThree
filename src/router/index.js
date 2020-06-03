@@ -70,6 +70,11 @@ const routes = [
         name: 'editDemander',
         component: () => import(/* webpackChunkName: "about" */ '../views/EditDemander')
     },
+    {
+        path: '/editDemanderTwo',/*申请表*/
+        name: 'editDemanderTwo',
+        component: () => import(/* webpackChunkName: "about" */ '../views/EditDemanderTwo')
+    },
 
     // {
     //     path: '/laboratory',/*在线市场*/

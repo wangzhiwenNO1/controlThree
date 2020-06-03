@@ -21,18 +21,18 @@
                 </div>
             </div>
         </el-col>
-        <el-col :span="11" class="cardBox">
-            <el-card class="box-card" v-if="true" shadow="hover">
+        <el-col :span="11" class="cardBox" >
+            <el-card class="box-card" v-for="(item,index) in List" :key="index" v-if="true" shadow="hover">
                 <div class="cardItem">
                     <div class="imgBox">
-                        <el-avatar :size="70" src="#"></el-avatar>
+                        <el-avatar :size="70" :src="item.labLogo"></el-avatar>
                         <el-button round size="mini" v-if="type!==4" class="payBtn">付费用户</el-button>
                     </div>
                     <div class="infoBox">
                         <div>
                             <div>
-                                <div class="name">上海少林检测技术服务有限公司</div>
-                                <div class="site">上海市黄浦区示例路888号</div>
+                                <div class="name">{{item.labName}}</div>
+                                <div class="site">{{item.address}}</div>
                             </div>
                             <div>
                                 <el-button class="greenBtn" size="mini" round v-if="type==4" @click="jumpTo">审核</el-button>
@@ -40,18 +40,18 @@
                             </div>
                         </div>
                         <div class="requsetNumBox" v-if="type!==4">
-                            <div class="regular">正常使用</div>
+                            <div class="regular">{{item.status==1?'正常使用':'暂停使用'}}</div>
                             <div>
                                 <i class="el-icon-document"></i>
-                                <div>编号：R1234</div>
+                                <div>编号：{{item.labCode}}</div>
                             </div>
                             <div>
                                 <i class="el-rili"></i>
-                                <div>注册日：2020-08-08</div>
+                                <div>注册日：{{item.registerDate}}</div>
                             </div>
                             <div>
                                 <i class="el-rili"></i>
-                                <div>有效至：2020-09-09</div>
+                                <div>有效至：{{item.validDate}}</div>
                             </div>
                         </div>
                     </div>
@@ -137,6 +137,7 @@
     export default {
         data() {
             return {
+                List:[],
                 checkList: ["选中且禁用", "复选框 A"],
                 type:1,
                 editor: null,
@@ -145,7 +146,24 @@
         },
         // catchData是一个类似回调函数，来自父组件，当然也可以自己写一个函数，主要是用来获取富文本编辑器中的html内容用来传递给服务端
         props: ['catchData'], // 接收父组件的方法
+        created() {
+            this.getList();
+        },
         methods: {
+            //获取需求方列表
+            getList() {
+                let that = this;
+                this.Axios.get("/lab2lab/v1/system/getrequestorlist", {
+                    type:that.type,
+                    page:1,
+                    limit:10
+                }).then(function (res) {
+                    console.log("获取需求方列表", res);
+                    if (res.code == 200) {
+                        that.List = res.data;
+                    }
+                })
+            },
             submitForm(formName) {
                 this.$refs[formName].validate(valid => {
                     if (valid) {
@@ -182,6 +200,7 @@
             },
             changeType(type){
                 this.type=type;
+                this.getList();
             }
         },
         mounted() {

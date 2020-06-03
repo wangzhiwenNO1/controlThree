@@ -1,196 +1,176 @@
 <template>
-    <div>
-        <div class="topBox">
-            <div>
-                <el-avatar shape="square" :size="50" src="#"></el-avatar>
-            </div>
-            <div>
-                <div>上海少林检测技术服务有限公司</div>
-                <div class="subtitle">上海浦东新区未来路888号</div>
-                <div class="subtitle">机构编号：R1234</div>
-            </div>
-            <div class="editBtn">
-                <el-button>编辑</el-button>
-            </div>
-        </div>
-        <div class="bodyBox">
-            <div class="leftBox">
-                <div>
-                    <i class="icon"></i><span>机构概况</span>
+    <div class="profileBox">
+        <div class="el-row">
+            <div class="el-col">
+                <div class="mechanism itemBox">
+                    <div class="title">机构简介</div>
+                    <div>{{labelInfos.introduction}}</div>
+                </div>
+                <div class="itemBox certificateBox" >
+                    <div class="title">
+                        <div>资质证书</div>
+                        <el-button icon="el-icon-circle-plus-outline" size="mini" type="text">上传证书</el-button>
+                    </div>
+                    <ul>
+                        <li v-for="(item,index) in labelInfos.certification" :key="index">
+                            <el-image :src="item.attrUrl" fit="fill"></el-image>
+                        </li>
+                    </ul>
                 </div>
             </div>
-            <div>
-                <el-row  class="rightBox">
-                    <el-col :span="12">
-                        <div class="grid-content bg-purple">
-                            <div class="title">机构介绍</div>
-                            <div>
-                                上海必为检测服务有限公司是独立的第三方检测机构，特色项目包括：EMC电磁兼
-                                容试验、三综合振动试验、ELV有害物质分析等，服务于电气电子、工业制造和汽
-                                车及其零部件行业，，主要客户包括：上海大众、上海通用、德国博世等。
-                            </div>
-                        </div>
-                    </el-col>
-                    <el-col :span="12">
-                        <div class="grid-content bg-purple">
-                            <div class="title">基本信息</div>
-                            <div>
-                                <div><span>公司地址：</span>上海市浦东新区未来路138号</div>
-                                <div><span>公司规模：</span>50-100人</div>
-                                <div><span>公司性质：</span>私营企业</div>
-                                <div><span>成立时间：</span>2010年</div>
-                                <div><span>网站地址：</span>www.</div>
-                            </div>
-                        </div>
-                    </el-col>
-                    <el-col :span="12">
-                        <div class="grid-content bg-purple">
-                            <div class="title">
-                                <div>资质证书</div>
-                                <div><el-button size="mini" type="text">上传证书</el-button></div>
-                            </div>
-                            <div class="zhengshu">
-                                <div>请上传证书</div>
-                            </div>
-                        </div>
-                    </el-col>
-                    <el-col :span="12">
-                        <div class="grid-content bg-purple">
-                            <div class="title">机构标签</div>
-                            <div>
-                                <div>期初检测，电磁兼容，材料分析，失效分析</div>
-                            </div>
-                        </div>
-                    </el-col>
-                </el-row>
+            <div class="el-col">
+                <div class="infoBox mechanism itemBox">
+                    <div class="title">基本信息</div>
+                    <div class="">
+                        <div><span>公司地址：</span>{{labelInfos.address}}</div>
+                        <div><span>公司规模：</span>{{labelInfos.labScale}}人 </div>
+                        <div><span>公司性质：</span>{{labelInfos.labNature}}</div>
+                        <div><span>成立时间：</span>{{labelInfos.establishmentTime}}年</div>
+                        <div><span>网站地址：</span>{{labelInfos.labSite}}</div>
+                    </div>
+                </div>
+                <div class="mechanismTab itemBox">
+                    <div class="title">机构标签</div>
+                    <div v-if="labelInfos.labelInfo">
+                        <el-tag
+                                v-for="(item,index) in labelInfos.labelInfo"
+                                :key="index"
+                                closable
+                        >
+                            {{item.labelName}}
+                        </el-tag>
+
+                    </div>
+                </div>
             </div>
         </div>
-        <Mechanism></Mechanism>
     </div>
 </template>
-
 <script>
-    import Mechanism from "../dialog/Mechanism";
+
     export default {
-        name: "Organization",
-        components:{
-            Mechanism
+        data() {
+            return {
+                labelInfos: "",
+            };
+        },
+        mounted() {
+            this.getlabinfo();
+        },
+        methods: {
+            //供应商机构概况
+            getlabinfo(){
+                let that=this;
+
+                this.Axios.get("/lab2lab/v1/system/getlabdetailinfo", {
+                    id:10
+                }).then(function (res) {
+                    console.log("供应商机构概况",res);
+                    that.labelInfos=res.data;
+
+                })
+            },
+
+
         }
-    }
+    };
 </script>
+<style lang="less" scoped>
+    .profileBox {
+        width: 100%;
+        box-sizing: border-box;
 
-<style lang="less">
-    .el-tabs__header {
-        margin: 0;
-    }
+        .el-row {
+            display: flex;
+        }
 
-    .topBox {
-        height: 5.5rem;
-        display: flex;
-        background: #999999;
-        padding: 1rem;
-        align-items: center;
+        .el-col {
+            line-height: 1.88rem;
+            position: relative;
+            box-sizing: border-box;
+            width: 50%;
+        }
 
-        font-size: 1.5rem;
-        font-weight: 400;
-        color: rgba(255, 254, 254, 1);
-        line-height: 1.5rem;
-        position: relative;
+        .itemBox{
+            padding: 0.5rem;
+            background: #ffffff;
+            margin:1rem 1rem 1rem 0;
+            min-height: 15rem;
+        }
 
-        .subtitle {
-            font-size: 0.75rem;
-            font-weight: 400;
-            color: rgba(255, 255, 255, 1);
+        .title{
+            padding-bottom:0.3rem;
+            border-bottom: 1px solid #F2F4FA;
+            margin-bottom: 0.1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .avatarBox {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            width: 10rem;
+            height: 9rem;
+            background: rgba(242, 244, 250, 1);
+            margin-right: 1rem;
+            line-height: 1.3rem;
         }
 
         .el-avatar {
-            margin-right: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .label {
+            font-size: 0.88rem;
+            font-weight: 400;
+            color: rgba(153, 153, 153, 1);
         }
 
-        .editBtn {
-            position: absolute;
-            right: 1rem;
-            top: 0;
+        .btnRow {
             display: flex;
-            height: 100%;
+            justify-content: flex-end;
             align-items: center;
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
 
-            .el-button {
-                width: 6.88rem;
-                height: 1.88rem;
-                background: linear-gradient(90deg, #005E92, rgba(52, 171, 255, 1));
-                border-radius: 1rem;
-                line-height: 1.88rem;
-                font-size: 0.75rem;
-                padding: 0;
+            i::before {
+                font-size: 1.5rem;
+                color: #2c64ff;
+                margin-left: 2rem;
             }
         }
-    }
 
-    .bodyBox{
-        display: flex;
-
-
-        .leftBox{
-            flex-shrink: 0;
-            width:8rem;
-            background:rgba(255,255,255,1);
-            padding-left:0.5rem;
-
-            &>div{
-                height:2.75rem;
-                background:rgba(242,244,250,1);
+        .certificateBox {
+            ul{
                 display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size:1rem;
-                font-weight:400;
-                color:rgba(44,100,255,1);
-                border-left:2px solid rgba(44,100,255,1);
 
-                .icon{
-                    display: inline-block;
-                    width:1rem;
-                    height: 1rem;
-                    margin-right: 0.5rem;
-                    background: url("../../assets/imgs/btn-jigou2.png");
-                    background-size: contain;
+                flex-wrap: wrap;
+                li{
+                    margin:0.3rem;
+
+                    .el-image{
+                        border:none;
+                    }
                 }
+            }
+            .el-image {
+                width: 8.31rem;
+                height: 12.25rem;
+                border: 0.06px solid rgba(51, 51, 51, 1);
+            }
+        }
+        .infoBox{
+            span{
+                color:#999999;
             }
         }
 
-        .rightBox{
-            padding:1rem;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
-            box-sizing: border-box;
-            
-            .grid-content{
-                background: #FFFFFF;
-                height:11rem;
-                background:rgba(255,255,255,1);
-                border-radius:0.3rem;
-                margin: 0.4rem;
-                padding:1rem;
-                box-sizing: border-box;
-
-
-                .title{
-                    padding:0 0 0.5rem;
-                    border-bottom:1px solid #eeeeee;
-                    margin-bottom:0.5rem;
-                    display: flex;
-                    justify-content: space-between;
-                }
-
-                span{
-                    color:#999999;
-                }
-
-                .zhengshu{
-                    text-align: center;
-                    color: #999999;
-                }
+        .mechanism,.mechanismTab{
+            min-height: 15rem;
+            .el-tag{
+                margin:0.3rem;
             }
         }
     }
