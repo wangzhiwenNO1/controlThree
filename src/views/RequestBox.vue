@@ -26,7 +26,8 @@
                 <div class="cardItem">
                     <div class="imgBox">
                         <el-avatar :size="70" :src="item.labLogo"></el-avatar>
-                        <el-button round size="mini" v-if="type!==4" class="payBtn">付费用户</el-button>
+                        <el-button round size="mini" v-if="item.isVip!=1" class="payBtn">付费用户</el-button>
+                        <el-button round size="mini" v-else class="">用户</el-button>
                     </div>
                     <div class="infoBox">
                         <div>
@@ -233,6 +234,7 @@
                 'redo' // 重复
             ];
             this.editor.create(); // 创建富文本实例
+            // alert(this.editor.txt.text());
         }
     };
 </script>
