@@ -139,6 +139,7 @@
         data() {
             return {
                 List:[],
+                requestor:{},//当前需求方
                 checkList: ["选中且禁用", "复选框 A"],
                 type:1,
                 editor: null,
@@ -162,6 +163,8 @@
                     console.log("获取需求方列表", res);
                     if (res.code == 200) {
                         that.List = res.data;
+                        that.requestor=res.data[0];
+                        console.log("requestor",that.requestor);
                     }
                 })
             },
@@ -195,9 +198,25 @@
                 return this.$confirm(`确定移除 ${file.name}？`);
             },
             jump(){
-                this.$router.push({
-                    path: "/demand",
-                })
+                //发送消息
+                let that=this;
+
+                this.Axios.get("/lab2lab/v1/provider/sendmessage", {
+                    userId:10,
+                    userName:"",
+                    toUserId:"",
+                    toUserName:"",
+                    message:"",
+                    messageFile:""
+                }).then(function (res) {
+                    console.log("供应商机构概况",res);
+                    that.labelInfos=res.data;
+
+                });
+
+                // this.$router.push({
+                //     path: "/demand",
+                // })
             },
             changeType(type){
                 this.type=type;
