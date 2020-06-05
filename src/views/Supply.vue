@@ -27,10 +27,11 @@
         </el-col>
         <el-col :span="11" class="cardBox">
             <el-card class="box-card" v-for="(item,index) in List" :key="index" v-if="true" shadow="hover">
-                <div class="cardItem">
-                    <div class="imgBox">
+                <div class="cardItem" @click="changeLabel(index)">
+                    <div class="imgBox" @click.stop="GoToInfo(index)">
                         <el-avatar :size="70" :src="item.labLogo"></el-avatar>
-                        <el-button round size="mini" v-if="type!==4" class="payBtn">付费用户</el-button>
+                        <el-button round size="mini" v-if="item.isVip!=1" class="payBtn">付费用户</el-button>
+                        <el-button round size="mini" v-else class="">用户</el-button>
                     </div>
                     <div class="infoBox">
                         <div>
@@ -39,7 +40,7 @@
                                 <div class="site">{{item.address}}</div>
                             </div>
                             <div>
-                                <el-button class="greenBtn" size="mini" round v-if="type==4" @click="jumpTo">审核</el-button>
+                                <el-button class="greenBtn" size="mini" round v-if="type==4" @click="jumpTo(item.id)">审核</el-button>
                                 <el-button class="greenBtn" size="mini" round v-else>选择</el-button>
                             </div>
                         </div>
@@ -114,20 +115,19 @@
                 </div>
                 <el-row class="detailsBoxTwo">
                     <el-col :span="8">
-
-                        <div>总用户数：6</div>
-                        <div>总设备数：18</div>
-                        <div>总链接数：8</div>
+                        <div>总用户数：{{labdetail.userCount}}</div>
+                        <div>总设备数：{{labdetail.deviceCount}}</div>
+                        <div>总链接数：{{labdetail.linkCount}}</div>
                     </el-col>
                     <el-col :span="8">
-                        <div>认可指数：8</div>
-                        <div>综合评分：4.5/5.0</div>
-                        <div class="activity">活跃度：<i class="icon"></i>优</div>
+                        <div>认可指数：{{labdetail.ratificationNum}}</div>
+                        <div>综合评分：{{labdetail.ratesNum}}/5.0</div>
+                        <div class="activity">活跃度：<i class="icon"></i>{{labdetail.activeStatus}}</div>
                     </el-col>
                     <el-col :span="8">
-                        <div>总交易额：￥98,800</div>
-                        <div>总订单数：12</div>
-                        <div>近30天交易次数：3</div>
+                        <div>总交易额：￥{{labdetail.totalPrice}}</div>
+                        <div>总订单数：{{labdetail.totalOrderCount}}</div>
+                        <div>近30天交易次数：{{labdetail.monthOrderCount}}</div>
                     </el-col>
 
                 </el-row>
@@ -142,6 +142,7 @@
         data() {
             return {
                 List:[],
+                labdetail:{},
                 checkList: ["选中且禁用", "复选框 A"],
                 type:1,
                 editor: null,
@@ -178,6 +179,11 @@
                     }
                 });
             },
+            GoToInfo(){
+                this.$router.push({
+                    path: "/editDemanderTwo"
+                });
+            },
             resetForm(formName) {
                 this.$refs[formName].resetFields();
             },
@@ -202,15 +208,31 @@
                     path: "/demand",
                 })
             },
-            jumpTo(){
-                this.$router.push({
-                    path: "/examine",
-                })
+            jumpTo(id){
+                this.$router.push({path: '/examine', query: {id: id}});
             },
             changeType(type){
                 this.type=type;
                 this.getList();
-            }
+            },
+            //切换需求方
+            changeLabel(index){
+                console.log(index);
+                let id=this.List[index].id;
+                this.getlabdetail(id);
+            },
+            ///lab2lab/v1/system/getlabdetail需求方详细信息
+            getlabdetail(id){
+                let that=this;
+                this.Axios.get("/lab2lab/v1/system/getlabdetail",{
+                    id:id,
+                }).then(function (res) {
+                    console.log("需求方详细信息",res);
+                    if(res.code==200){
+                        that.labdetail=res.data;
+                    }
+                })
+            },
         },
         mounted() {
             this.editor = new E(this.$refs.editorElem);

@@ -5,10 +5,10 @@
 <!--                <i class="icon-wholes"></i>-->
 <!--                <div>全部人员</div>-->
 <!--            </div >-->
-<!--            <div :class="type==4?'active':''" @click="changeType(4)">-->
-<!--                <i class="icon-power"></i>-->
-<!--                <div>权限管理</div>-->
-<!--            </div>-->
+            <div :class="type==1?'active':''" @click="changeType(1)">
+                <i class="icon-power"></i>
+                <div>全部人员</div>
+            </div>
             <div class="addBox" :class="type==2?'active':''" @click="changeType(2)">
                 <i class="el-icon-circle-plus-outline"></i>
                 <div>添加新人员</div>

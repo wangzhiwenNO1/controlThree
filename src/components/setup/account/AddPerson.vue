@@ -3,14 +3,14 @@
        <div class="title">添加新成员</div>
 
         <el-form-item label="姓名">
-            <el-input v-model="ruleForm.name"></el-input>
+            <el-input v-model="ruleForm.userName"></el-input>
         </el-form-item>
 
         <el-form-item label="邮箱">
-            <el-input v-model="ruleForm.site"></el-input>
+            <el-input v-model="ruleForm.email"></el-input>
         </el-form-item>
         <el-form-item label="角色">
-            <el-select v-model="value" placeholder="请选择">
+            <el-select v-model="ruleForm.position" placeholder="请选择">
                 <el-option
                         v-for="item in options"
                         :key="item.value"
@@ -21,7 +21,7 @@
         </el-form-item>
 
         <el-form-item label="职位">
-            <el-input v-model="ruleForm.ypwd"></el-input>
+            <el-input v-model="ruleForm.roleCode"></el-input>
         </el-form-item>
 
 
@@ -36,14 +36,13 @@
         data() {
             return {
                 ruleForm: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
+                    userName: '',
+                    email: '',
+                    position: '',
+                    roleCode: '',
                     delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
+                    isPubilc:1,
+                    orderHandler:1
                 },
                 rules: {
                     name: [
@@ -89,15 +88,25 @@
             };
         },
         methods: {
+            //添加用户
             submitForm(formName) {
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        alert('submit!');
-                    } else {
-                        console.log('error submit!!');
-                        return false;
+
+                let that=this;
+                this.Axios.get("/lab2lab/v1/provider/adduser",that.ruleForm).then(function (res) {
+                    console.log("添加用户",res);
+                    if(res.code==200){
+
                     }
-                });
+                })
+
+                // this.$refs[formName].validate((valid) => {
+                //     if (valid) {
+                //         alert('submit!');
+                //     } else {
+                //         console.log('error submit!!');
+                //         return false;
+                //     }
+                // });
             },
             resetForm(formName) {
                 this.$refs[formName].resetFields();

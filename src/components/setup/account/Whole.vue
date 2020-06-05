@@ -1,19 +1,20 @@
 <template>
     <div>
         <el-row>
-            <el-col :span="12">
+            <el-col :span="12" v-if="labList">
                 <div class="grid-content ">
                     <div class="avatarBox">
                         <el-avatar :size="70"></el-avatar>
-                        <div class="name">张三丰</div>
-                        <div class="subTitle">实验室经理</div>
+                        <div class="name">{{labList[0].userName}}</div>
+                        <div class="subTitle">{{labList[0].position}}</div>
                     </div>
                     <div class="infoBox">
                         <div class="editBox">
                             <div>编辑</div>
+                            <div class="del">删除</div>
                         </div>
-                        <div><span>联系邮箱：</span>123@tianji.com</div>
-                        <div><span>角色：</span>超级管理员</div>
+                        <div><span>联系邮箱：</span>{{labList[0].email}}</div>
+                        <div><span>角色：</span>{{labList[0].roleCode}}</div>
                         <div class="btnRows">
                             <i class="el-icon-message"></i>
                             <i class="el-icon-chat-dot-square"></i>
@@ -26,21 +27,21 @@
 
             </el-col>
         </el-row>
-        <el-row>
-            <el-col :span="12">
-                <div class="grid-content ">
+        <el-row v-if="labList">
+            <el-col :span="12"  v-for="(item,index) in labList" v-if="index!=0&&item.public==1">
+                <div class="grid-content " >
                     <div class="avatarBox">
                         <el-avatar :size="70"></el-avatar>
-                        <div class="name">张三丰</div>
-                        <div class="subTitle">实验室经理</div>
+                        <div class="name">{{item.userName}}</div>
+                        <div class="subTitle">{{item.position}}</div>
                     </div>
                     <div class="infoBox">
                         <div class="editBox">
                             <div>编辑</div>
                             <div class="del">删除</div>
                         </div>
-                        <div><span>联系邮箱：</span>123@tianji.com</div>
-                        <div><span>角色：</span>超级管理员</div>
+                        <div><span>联系邮箱：</span>{{item.email}}</div>
+                        <div><span>角色：</span>{{item.roleCode}}</div>
                         <div class="btnRows">
                             <i class="el-icon-message"></i>
                             <i class="el-icon-chat-dot-square"></i>
@@ -49,35 +50,40 @@
 
                 </div>
             </el-col>
-            <el-col :span="12">
-                <div class="grid-content ">
-                    <div class="avatarBox">
-                        <el-avatar :size="70"></el-avatar>
-                        <div class="name">张三丰</div>
-                        <div class="subTitle">实验室经理</div>
-                    </div>
-                    <div class="infoBox">
-                        <div class="editBox">
-                            <div>编辑</div>
-                            <div class="del">删除</div>
-                        </div>
-                        <div><span>联系邮箱：</span>123@tianji.com</div>
-                        <div><span>角色：</span>超级管理员</div>
-                        <div class="btnRows">
-                            <i class="el-icon-message"></i>
-                            <i class="el-icon-chat-dot-square"></i>
-                        </div>
-                    </div>
 
-                </div>
-            </el-col>
         </el-row>
     </div>
 </template>
 
 <script>
+
     export default {
-        name: "Whole"
+        name: "Whole",
+        components:{
+
+        },
+        data(){
+            return{
+                type:1,
+                labList:[],
+            }
+        },
+        methods:{
+        //    查询用户列表
+            getuserlist(){
+                let that=this;
+                this.Axios.get("/lab2lab/v1/provider/getuserlist",{
+                }).then(function (res) {
+                    console.log("查询用户列表",res);
+                    if(res.code==200){
+                        that.labList=res.data;
+                    }
+                })
+            },
+        },
+        mounted() {
+            this.getuserlist();
+        }
     }
 </script>
 

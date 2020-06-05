@@ -9,8 +9,8 @@
                     <div ref="editorElem" style="text-align:left;"></div>
                 </div>
                 <div class="btnRow">
-                    <el-button size="mini" round @click="jump">批准</el-button>
-                    <el-button size="mini" round>驳回</el-button>
+                    <el-button size="mini" round @click="getverifylab(1)">批准</el-button>
+                    <el-button size="mini" round @click="getverifylab(0)">驳回</el-button>
                 </div>
             </div>
 
@@ -23,21 +23,20 @@
 
                     <el-row class="detailsBoxTwo">
                         <el-col :span="4">
-
-                            <el-avatar :size="80"></el-avatar>
+                            <el-avatar :size="80" :src="labdetail.labLogo"></el-avatar>
                         </el-col>
 
                         <el-col :span="10">
-                            <div>机构名称：<span>上海少林检测服务有限公司</span></div>
-                            <div>机构地址：<span>上海黄浦区发达路888号</span></div>
+                            <div>机构名称：<span>{{labdetail.labCode}}</span></div>
+                            <div>机构地址：<span>{{labdetail.address}}</span></div>
                             <div>机构类型：<span>检测实验室</span></div>
-                            <div> 机构资质：<span>ISO/IEC1702</span></div>
+                            <div>机构资质：<span>ISO/IEC1702</span></div>
                         </el-col>
                         <el-col :span="10">
-                            <div>联系人：<span>任盈盈</span></div>
-                            <div>邮箱地址：<span>wangming@sample.com</span></div>
-                            <div>联系电话：<span>1388888888</span></div>
-                            <div>职位：<span>客户经理</span></div>
+                            <div>联系人：<span>{{labdetail.contactName}}</span></div>
+                            <div>邮箱地址：<span>{{labdetail.contactEmail}}</span></div>
+                            <div>联系电话：<span>{{labdetail.contactPhone}}</span></div>
+                            <div>职位：<span>{{labdetail.contactPosotion}}</span></div>
                         </el-col>
 
                     </el-row>
@@ -46,14 +45,16 @@
                 <div class="informationTwo informationItem">
                     <div class="title">机构简介</div>
                     <div class="text">
-                        上海必为检测服务有限公司是独立的第三方检测机构，特色项目包括：EMC电磁兼容试验、三综合振动试验、ELV有害物质分析等， 服务
+                        {{labelInfos.introduction}}
                     </div>
                 </div>
                 <div class="informationThree informationItem">
                     <div class="title">资质证书</div>
-                    <div>
-                        <el-image src="#" fit="fill"></el-image>
-                    </div>
+                    <ul class="aptitudeUl">
+                        <li v-for="(item,index) in labelInfos.certification" :key="index">
+                            <el-image :src="item.attrUrl" fit="fill"></el-image>
+                        </li>
+                    </ul>
                 </div>
 
             </div>
@@ -66,6 +67,9 @@
     export default {
         data() {
             return {
+                labId:"",
+                labdetail:{},
+                labelInfos:{},
                 checkList: ["选中且禁用", "复选框 A"],
                 type:1,
                 editor: null,
@@ -104,14 +108,49 @@
             beforeRemove(file, fileList) {
                 return this.$confirm(`确定移除 ${file.name}？`);
             },
-            jump(){
-                this.$router.push({
-                    path: "/demand",
-                })
-            },
+
             changeType(type){
                 this.type=type;
-            }
+            },
+            ///lab2lab/v1/system/getlabdetail需求方详细信息
+            getlabdetail(id){
+                let that=this;
+                this.Axios.get("/lab2lab/v1/system/getlabdetail",{
+                    id:id,
+                }).then(function (res) {
+                    console.log("需求方详细信息",res);
+                    if(res.code==200){
+                        that.labdetail=res.data;
+                    }
+                })
+            },
+            //供应商机构概况
+            getlabinfo(id){
+                let that=this;
+
+                this.Axios.get("/lab2lab/v1/system/getlabdetailinfo", {
+                    id:id
+                }).then(function (res) {
+                    console.log("供应商机构概况",res);
+                    that.labelInfos=res.data;
+
+                })
+            },
+        //    审核服务方
+            getverifylab(status){
+                let that=this;
+
+                this.Axios.get("/lab2lab/v1/system/verifylab", {
+                    id:that.labId,
+                    status:status,
+                    reason:that.editor.txt.text()
+                }).then(function (res) {
+                    console.log("供应商机构概况",res);
+                    that.labelInfos=res.data;
+
+                })
+            },
+
         },
         mounted() {
             this.editor = new E(this.$refs.editorElem);
@@ -143,6 +182,11 @@
                 'redo' // 重复
             ];
             this.editor.create(); // 创建富文本实例
+
+
+            this.labId=this.$route.query.id;
+            this.getlabdetail(this.labId);
+            this.getlabinfo(this.labId);
         }
     };
 </script>
@@ -160,6 +204,13 @@
     }
     .el-checkbox__label{
         font-size:0.75rem;
+    }
+    .aptitudeUl{
+        display: flex;
+
+        li{
+            margin-right: 0.3rem;
+        }
     }
     .radioBox {
         background: #ffffff;

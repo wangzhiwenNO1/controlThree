@@ -22,10 +22,10 @@
             </div>
         </el-col>
         <el-col :span="11" class="cardBox" >
-            <el-card class="box-card" v-for="(item,index) in List" :key="index" v-if="true" shadow="hover">
-                <div class="cardItem">
-                    <div class="imgBox">
-                        <el-avatar :size="70" :src="item.labLogo"></el-avatar>
+            <el-card class="box-card" v-for="(item,index) in List" :key="index" v-if="true" shadow="hover" >
+                <div class="cardItem" @click="changeLabel(index)">
+                    <div class="imgBox" @click.stop="GoToInfo(index)">
+                        <el-avatar :size="70" :src="item.labLogo" ></el-avatar>
                         <el-button round size="mini" v-if="item.isVip!=1" class="payBtn">付费用户</el-button>
                         <el-button round size="mini" v-else class="">用户</el-button>
                     </div>
@@ -79,7 +79,7 @@
                 <ul>
                     <li>
                         <div class="label">收件人</div>
-                        <div><el-input></el-input></div>
+                        <div><el-input v-model="msgData.toUserName"></el-input></div>
                     </li>
                     <li>
                         <div class="label">主题</div>
@@ -106,25 +106,26 @@
                     <el-avatar :size="50"></el-avatar>
                     <div>
                         <div>上海必为检测技术服务有限公司</div>
-                        <div class="site">上海市徐汇区示例路888号</div>
+                        <div class="site">{{requestor.address}}</div>
                     </div>
                 </div>
                 <el-row class="detailsBoxTwo">
                     <el-col :span="8">
+                        <div>总用户数：{{requestor.userCount}}</div>
+                        <div>总设备数：{{requestor.deviceCount}}</div>
+                        <div>总链接数：{{requestor.linkCount}}</div>
 
-                        <div>总用户数：6</div>
-                        <div>总设备数：18</div>
-                        <div>总链接数：8</div>
                     </el-col>
                     <el-col :span="8">
-                        <div>认可指数：8</div>
-                        <div>综合评分：4.5/5.0</div>
-                        <div class="activity">活跃度：<i class="icon"></i>优</div>
+                        <div>认可指数：{{requestor.ratificationNum}}</div>
+                        <div>综合评分：{{requestor.ratesNum}}/5.0</div>
+                        <div class="activity">活跃度：<i class="icon"></i>{{requestor.activeStatus}}</div>
                     </el-col>
                     <el-col :span="8">
-                        <div>总交易额：￥98,800</div>
-                        <div>总订单数：12</div>
-                        <div>近30天交易次数：3</div>
+                        <div>总交易额：￥{{requestor.totalPrice}}</div>
+                        <div>总订单数：{{requestor.totalOrderCount}}</div>
+                        <div>近30天交易次数：{{requestor.monthOrderCount}}</div>
+
                     </el-col>
 
                 </el-row>
@@ -141,6 +142,12 @@
                 List:[],
                 requestor:{},//当前需求方
                 checkList: ["选中且禁用", "复选框 A"],
+                msgData:{
+                    toUserName:"",
+                    userName:"",
+                    toUserId:"",
+                    messageFile:""
+                },
                 type:1,
                 editor: null,
                 editorContent: ''
@@ -165,6 +172,19 @@
                         that.List = res.data;
                         that.requestor=res.data[0];
                         console.log("requestor",that.requestor);
+                        that.getrequestor(that.requestor.id)
+                    }
+                })
+            },
+            ///lab2lab/v1/system/getrequestor需求方详细信息
+            getrequestor(id){
+                let that=this;
+                this.Axios.get("/lab2lab/v1/system/getcustomerdetail",{
+                    id:id,
+                }).then(function (res) {
+                    console.log("需求方详细信息",res);
+                    if(res.code==200){
+                        that.requestor=res.data;
                     }
                 })
             },
@@ -200,15 +220,11 @@
             jump(){
                 //发送消息
                 let that=this;
-
-                this.Axios.get("/lab2lab/v1/provider/sendmessage", {
-                    userId:10,
-                    userName:"",
-                    toUserId:"",
-                    toUserName:"",
-                    message:"",
-                    messageFile:""
-                }).then(function (res) {
+                let param=that.msgData;
+                that.msgData.userId=that.requestor.id;
+                that.msgData.toUserId=that.requestor.id;
+                that.msgData.message=that.editor.txt.text();
+                this.Axios.get("/lab2lab/v1/provider/sendmessage", that.msgData).then(function (res) {
                     console.log("供应商机构概况",res);
                     that.labelInfos=res.data;
 
@@ -221,7 +237,19 @@
             changeType(type){
                 this.type=type;
                 this.getList();
-            }
+            },
+            //切换需求方
+            changeLabel(index){
+                console.log(index);
+                let id=this.List[index].id;
+                this.getrequestor(id);
+            },
+            //去详情
+            GoToInfo(index){
+                this.$router.push({
+                    path: "/editDemander"
+                });
+            },
         },
         mounted() {
             this.editor = new E(this.$refs.editorElem);
