@@ -12,6 +12,7 @@
             </el-table-column>
             <el-table-column
                     label="免费用户"
+
                     width="120">
                 <template slot-scope="scope">
                     <div><el-input size="mini"></el-input></div>
